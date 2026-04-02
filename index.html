@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cubastur Gestor</title>
+<style>
+    /* Estilos generales */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        max-width: 800px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .card {
+        background-color: #111;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(255,0,0,0.3);
+        padding: 20px;
+        flex: 1 1 250px;
+        min-width: 250px;
+        max-width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(255,0,0,0.5);
+    }
+
+    button {
+        background-color: #e60000;
+        color: #fff;
+        font-weight: bold;
+        font-size: 1.1em;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #ff1a1a;
+        transform: scale(1.05);
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 8px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+    }
+
+    label {
+        margin-top: 10px;
+        display: block;
+        font-weight: bold;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    img.progress-img {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    a {
+        color: #ff4d4d;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    @media(max-width:600px){
+        .card {
+            max-width: 90%;
+        }
+    }
+
+</style>
+</head>
+<body>
+
+<h1>Bienvenido a <strong>Cubastur Gestor</strong>, tu aplicación para gestionar tu reforma, ver su progreso y estar siempre en contacto</h1>
+
+<div class="container">
+    <div class="card">
+        <h2>Noticias y Novedades</h2>
+        <button onclick="showSection('news')">Acceder</button>
+    </div>
+
+    <div class="card">
+        <h2>Pedir Presupuesto</h2>
+        <button onclick="showSection('quote')">Acceder</button>
+    </div>
+
+    <div class="card">
+        <h2>Mi Reforma</h2>
+        <button onclick="showSection('progress')">Acceder</button>
+    </div>
+
+    <div class="card">
+        <h2>Datos de Contacto</h2>
+        <button onclick="showSection('contact')">Acceder</button>
+    </div>
+</div>
+
+<!-- Secciones ocultas -->
+<div id="news" class="card hidden">
+    <h2>Noticias</h2>
+    <div id="news-list">
+        <p>No hay noticias actualmente.</p>
+    </div>
+    <label for="new-news">Agregar noticia (solo admin):</label>
+    <textarea id="new-news" rows="3"></textarea>
+    <button onclick="addNews()">Agregar Noticia</button>
+    <button onclick="hideSection('news')">Cerrar</button>
+</div>
+
+<div id="quote" class="card hidden">
+    <h2>Solicitud de Presupuesto</h2>
+    <label for="name">Nombre:</label>
+    <input id="name" type="text">
+    <label for="email">Email:</label>
+    <input id="email" type="email">
+    <label for="details">Detalles de la reforma:</label>
+    <textarea id="details" rows="4"></textarea>
+    <button onclick="submitQuote()">Enviar Solicitud</button>
+    <button onclick="hideSection('quote')">Cerrar</button>
+</div>
+
+<div id="progress" class="card hidden">
+    <h2>Progreso de la Reforma</h2>
+    <div id="progress-list">
+        <p>No hay datos disponibles.</p>
+    </div>
+    <label for="progress-update">Actualizar progreso (solo admin):</label>
+    <textarea id="progress-update" rows="3"></textarea>
+    <label for="progress-img">URL de imagen:</label>
+    <input id="progress-img" type="text">
+    <button onclick="addProgress()">Actualizar</button>
+    <button onclick="hideSection('progress')">Cerrar</button>
+</div>
+
+<div id="contact" class="card hidden">
+    <h2>Datos de Contacto</h2>
+    <p>📞 Teléfono: <a href="tel:621393631">621 39 36 31</a></p>
+    <p>✉ Email: <a href="mailto:cubastur.reformas@gmail.com">cubastur.reformas@gmail.com</a></p>
+    <p>📍 Ubicación: Francisco Pizarro 2, Avilés, Asturias</p>
+    <p>💬 WhatsApp: <a href="https://wa.me/34621393631" target="_blank">Inicia chat</a></p>
+    <button onclick="hideSection('contact')">Cerrar</button>
+</div>
+
+<script>
+    function showSection(id){
+        document.getElementById(id).classList.remove('hidden');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function hideSection(id){
+        document.getElementById(id).classList.add('hidden');
+    }
+
+    // Noticias
+    function addNews(){
+        const newsText = document.getElementById('new-news').value.trim();
+        if(newsText === '') return alert('Introduce una noticia.');
+        const newsList = document.getElementById('news-list');
+        const p = document.createElement('p');
+        p.textContent = newsText;
+        newsList.appendChild(p);
+        document.getElementById('new-news').value = '';
+    }
+
+    // Presupuesto
+    function submitQuote(){
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const details = document.getElementById('details').value.trim();
+        if(!name || !email || !details) return alert('Rellena todos los campos.');
+        alert(`Solicitud enviada.\nNombre: ${name}\nEmail: ${email}\nDetalles: ${details}`);
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('details').value = '';
+    }
+
+    // Progreso reforma
+    function addProgress(){
+        const progressText = document.getElementById('progress-update').value.trim();
+        const imgURL = document.getElementById('progress-img').value.trim();
+        if(progressText === '' && imgURL === '') return alert('Introduce datos o imagen.');
+        const list = document.getElementById('progress-list');
+
+        if(progressText){
+            const p = document.createElement('p');
+            p.textContent = progressText;
+            list.appendChild(p);
+        }
+
+        if(imgURL){
+            const img = document.createElement('img');
+            img.src = imgURL;
+            img.alt = 'Progreso reforma';
+            img.className = 'progress-img';
+            list.appendChild(img);
+        }
+
+        document.getElementById('progress-update').value = '';
+        document.getElementById('progress-img').value = '';
+    }
+</script>
+
+</body>
+</html>
